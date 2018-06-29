@@ -4,7 +4,7 @@ const {WORKING_DAYS, WORKING_HOURS} = require('./scheduleConstants');
 const {dateUtilities} = require('./dateUtilities');
 const {validation} = require('./validation');
 
-const dueDateProgram = {
+class dueDateProgram  {
 
   calculateDueDate(submitDate, turnaroundHour = 1) {
     const validatedInputs = validation.checkInputs(submitDate,turnaroundHour);
@@ -14,14 +14,14 @@ const dueDateProgram = {
       const dueDate = this.dueDateCalculator(submitDate, turnaroundHour);
       return `Due date: ${dateUtilities.getFormattedUTCDate(dueDate)}`;
     }
-  },
+  }
   
   dueDateCalculator(startDate, turnaroundHour) {
     const UTCTimestamp = dateUtilities.createUTCTimestamp(startDate);
     const timeLeftToWork = this.calculateTimeLeftToWork(turnaroundHour);
     const dueDate = this.getResolveDate(UTCTimestamp, timeLeftToWork);
     return new Date(dueDate);
-  },
+  }
   
   calculateTimeLeftToWork(hours) {
     const fullDayWorkHours = dateUtilities.getFullDayWorkHours(WORKING_HOURS.startHour, WORKING_HOURS.endHour);
@@ -37,7 +37,7 @@ const dueDateProgram = {
       hoursToWork,
     };
     return calculatedTimes;
-  },
+  }
   
   getResolveDate(startDate, timeLeft) {
     const cloneStartDate = new Date(startDate);
@@ -46,7 +46,7 @@ const dueDateProgram = {
     const finalResolveDate = this.calculateOverflowingDay(timestampWithAddedWorkDaysAndHours);
 
     return finalResolveDate;
-  },
+  }
   
   addWorkDays(startDate, daysToWork) {
     const SATURDAY_JS = 6;
@@ -67,14 +67,14 @@ const dueDateProgram = {
     }
     const newDateAfterWorkDays = new Date(startDate.setDate(startDate.getDate() + daysToAdd))  
     return newDateAfterWorkDays;
-  },
-  
+  }
+
   addWorkHours(currentDate, hoursToWork) {
     const addedHours = currentDate.setUTCHours(
       currentDate.getUTCHours() + hoursToWork
     );
     return new Date(addedHours);
-  },
+  }
 
   calculateOverflowingDay(timestamp) {
     const workingDayEndHour = parseInt(WORKING_HOURS.endHour.split(':')[0]);

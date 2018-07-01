@@ -1,27 +1,9 @@
 'use strict';
 const {expect} = require('chai');
 const dueDateProgram = require('../src/index');
+const {wrongDateInputs, validDateInputs, wrongTurnaroundHours, validTurnaroundHours} = require('./testInputs');
 const dueDateCalculator = new dueDateProgram();
 
-const wrongDateInputs = {
-  emptyInput: '',
-  notValidFormat: 'notRight',
-  weekend: '2018-06-17 09:00',
-  afterWorkHours: '2018-06-15 20:00',
-  notExistentDay: '2018-06-31 09:00',
-};
-
-const validDateInputs = {
-  weekday: '2018-07-02 09:00',
-};
-
-const wrongTurnaroundHours = {
-  notEnoughTime: 0,
-};
-
-const validTurnaroundHours = {
-  twoHours: 2,
-};
 
 describe('Test dueDateProgram', function() {
   describe('with invalid input, it returns an error', function() {

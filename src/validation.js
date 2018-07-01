@@ -3,8 +3,8 @@
 const {dateUtilities} = require('./dateUtilities');
 const {WORKING_DAYS, WORKING_HOURS} = require('./scheduleConstants');
 
-const validation = {
-  checkInputs(date, turnaroundHours) {
+class validation {
+  static checkInputs(date, turnaroundHours) {
     const validatedInputDate = this.isInputDateFormatValid(date);
     const validatedTurnaroundHours = this.isTurnaroundHoursValid(turnaroundHours);
     const validatedWorkingTimeSubmit = this.isInWorkingDay(date) && this.isInWorkingTime(date);
@@ -21,27 +21,27 @@ const validation = {
         error: false,
       };
     }
-  },
+  }
 
-  isInputDateFormatValid(inputDate) {
+  static isInputDateFormatValid(inputDate) {
     const regexpForInputTimestamp = /^\d{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2]\d|3[0-1]))|(02-(0[1-9]|[1-2]\d))|((0[469]|11)-(0[1-9]|[1-2]\d|30)))\s([0-1]\d|2[0-3]):[0-5]\d$/;
     if (inputDate.match(regexpForInputTimestamp)) {
       return true;
     }
     return false;
-  },
+  }
 
-  isTurnaroundHoursValid(turnaroundHours) {
+  static isTurnaroundHoursValid(turnaroundHours) {
     return turnaroundHours > 0;
-  },
+  }
 
-  isInWorkingDay(date) {
+  static isInWorkingDay(date) {
     const nameOfTheCurrentDay = dateUtilities.getCurrentDayName(date);
     const isInWorkingDay = WORKING_DAYS.indexOf(nameOfTheCurrentDay) !== -1;
     return isInWorkingDay;
-  },
+  }
 
-  isInWorkingTime(date) {
+  static isInWorkingTime(date) {
     const UTCTimestamp = dateUtilities.createUTCTimestamp(date);
     const submitTime = UTCTimestamp.toUTCString().split(' ')[4];
     const submitTimeInSeconds = dateUtilities.getSecondsFromHMS(submitTime);
@@ -51,14 +51,14 @@ const validation = {
     const beforeEndHour = submitTimeInSeconds <= endHourInSeconds;
 
     return afterStartHour && beforeEndHour;
-  },
+  }
 
-  isThereAnError(validations) {
+  static isThereAnError(validations) {
     const isThereAnyNotValid = validations.some((validation) => validation === false)
     return isThereAnyNotValid;
-  },
+  }
 
-  getFormattedErrorMessages(errors) {
+  static getFormattedErrorMessages(errors) {
     return errors.validatedInputDate
     ? errors.validatedTurnaroundHours
     ? errors.validatedWorkingTimeSubmit
@@ -66,7 +66,7 @@ const validation = {
     : 'Please only submit bugs in working hours'
     : 'Turnaround time must be greater than 0'
     : 'Please check your input and use the YYYY-MM-DD HH:MM format';
-  },
+  }
 
 
 

@@ -34,7 +34,7 @@ describe('Test dueDateProgram', function() {
         result: 'Please check your input and use the YYYY-MM-DD HH:MM format',
       },
       {
-        date: validDateInputs.weekdayHour9,
+        date: validDateInputs.mondayHour9,
         turnaroundHours: wrongTurnaroundHours.notEnoughTime,
         result: 'Turnaround time must be greater than 0',
       },
@@ -52,70 +52,61 @@ describe('Test dueDateProgram', function() {
   });
 
   describe('with valid input, it returns the due date', function() {
-    it('within day', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-06-11 10:00', 1)).to.eql(
-        'Due date: Jun 11 11:00'
-      );
+    describe('tests contains within day, over day and over the weekend due dates', function() {
+      const validDateAssertions = [
+        {
+          date: validDateInputs.mondayHour9,
+          turnaroundHours: validTurnaroundHours.twoHours,
+          result: 'Due date: Jul 02 11:00',
+        },
+        {
+          date: validDateInputs.mondayHour9,
+          turnaroundHours: validTurnaroundHours.eightHours,
+          result: 'Due date: Jul 02 17:00',
+        },
+        {
+          date: validDateInputs.mondayHour9,
+          turnaroundHours: validTurnaroundHours.tenHours,
+          result: 'Due date: Jul 03 11:00',
+        },
+        {
+          date: validDateInputs.fridayHour10,
+          turnaroundHours: validTurnaroundHours.tenHours,
+          result: 'Due date: Jul 09 12:00',
+        },
+      ];
+      validDateAssertions.forEach(({date, turnaroundHours, result}) => {
+        describe(`When called with ${date} and ${turnaroundHours}`, function() {
+          it(`should return ${result}`, function() {
+            expect(
+              dueDateCalculator.calculateDueDate(date, turnaroundHours)
+            ).to.equal(result);
+          });
+        });
+      });
     });
-    it('within day', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-06-11 09:26', 5)).to.eql(
-        'Due date: Jun 11 14:26'
-      );
-    });
-    it('within full day', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-06-11 09:00', 8)).to.eql(
-        'Due date: Jun 11 17:00'
-      );
-    });
-    it('with overday', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-06-11 10:00', 8)).to.eql(
-        'Due date: Jun 12 10:00'
-      );
-    });
-    it('with overday', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-06-11 10:00', 11)).to.eql(
-        'Due date: Jun 12 13:00'
-      );
-    });
-    it('with overday', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-06-04 09:15', 8)).to.eql(
-        'Due date: Jun 05 09:15'
-      );
-    });
-    it('with overday', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-06-04 10:15', 16)).to.eql(
-        'Due date: Jun 06 10:15'
-      );
-    });
-    it('with weekend', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-06-15 15:00', 5)).to.eql(
-        'Due date: Jun 18 12:00'
-      );
-    });
-    it('with weekend', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-05-31 16:00', 10)).to.eql(
-        'Due date: Jun 04 10:00'
-      );
-    });
-    it('with over month end date', function() {
-      expect(
-        dueDateCalculator.calculateDueDate('2018-06-01 09:00', 400)
-      ).to.eql('Due date: Aug 09 17:00');
-    });
-    it('with over year end date', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-12-31 16:00', 2)).to.eql(
-        'Due date: Jan 01 10:00'
-      );
-    });
-    it('from february to march', function() {
-      expect(dueDateCalculator.calculateDueDate('2018-02-28 16:12', 2)).to.eql(
-        'Due date: Mar 01 10:12'
-      );
-    });
-    it('leap february', function() {
-      expect(dueDateCalculator.calculateDueDate('2020-02-28 16:00', 2)).to.eql(
-        'Due date: Mar 02 10:00'
-      );
-    });
+    describe('tests contains edge cases', function() {
+      it('with over month end date', function() {
+        expect(
+          dueDateCalculator.calculateDueDate(validDateInputs.fridayHour9, validTurnaroundHours.fourHundred)
+        ).to.eql('Due date: Aug 09 17:00');
+      });
+      it('with over year end date', function() {
+        expect(dueDateCalculator.calculateDueDate(validDateInputs.lastDayOfYearHour16, validTurnaroundHours.twoHours)).to.eql(
+          'Due date: Jan 01 10:00'
+        );
+      });
+      it('from february to march', function() {
+        expect(dueDateCalculator.calculateDueDate(validDateInputs.lastDayOfFebruaryHour16Minutes12, validTurnaroundHours.twoHours)).to.eql(
+          'Due date: Mar 01 10:12'
+        );
+      });
+      it('leap february', function() {
+        expect(dueDateCalculator.calculateDueDate(validDateInputs.leapYearFebruaryHour16, validTurnaroundHours.twoHours)).to.eql(
+          'Due date: Mar 02 10:00'
+        );
+      });
+    })
+    
   });
 });

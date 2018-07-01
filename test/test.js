@@ -7,7 +7,7 @@ const dueDateCalculator = new dueDateProgram();
 
 describe('Test dueDateProgram', function() {
   describe('with invalid input, it returns an error', function() {
-    const dateAssertions = [
+    const invalidDateAssertions = [
       {
         date: wrongDateInputs.emptyInput,
         turnaroundHours: validTurnaroundHours.twoHours,
@@ -34,13 +34,13 @@ describe('Test dueDateProgram', function() {
         result: 'Please check your input and use the YYYY-MM-DD HH:MM format',
       },
       {
-        date: validDateInputs.weekday,
+        date: validDateInputs.weekdayHour9,
         turnaroundHours: wrongTurnaroundHours.notEnoughTime,
         result: 'Turnaround time must be greater than 0',
       },
     ];
 
-    dateAssertions.forEach(({date, turnaroundHours, result}) => {
+    invalidDateAssertions.forEach(({date, turnaroundHours, result}) => {
       describe(`When called with ${date} and ${turnaroundHours}`, function() {
         it(`should return ${result}`, function() {
           expect(
@@ -51,7 +51,7 @@ describe('Test dueDateProgram', function() {
     });
   });
 
-  describe('correct input', function() {
+  describe('with valid input, it returns the due date', function() {
     it('within day', function() {
       expect(dueDateCalculator.calculateDueDate('2018-06-11 10:00', 1)).to.eql(
         'Due date: Jun 11 11:00'

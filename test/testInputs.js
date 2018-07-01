@@ -7,7 +7,7 @@ const wrongDateInputs = {
 };
 
 const validDateInputs = {
-  weekday: '2018-07-02 09:00',
+  weekdayHour9: '2018-07-02 09:00',
 };
 
 const wrongTurnaroundHours = {

@@ -2,7 +2,7 @@
 
 const {WORKING_DAYS, WORKING_HOURS} = require('./scheduleConstants');
 const {dateUtilities} = require('./dateUtilities');
-const {validation} = require('./validation');
+const {validation} = require('./validation/validation');
 
 class dueDateProgram  {
 

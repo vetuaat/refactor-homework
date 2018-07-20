@@ -46,8 +46,7 @@ class validation {
   }
 
   static isInWorkingTime(date) {
-    const UTCTimestamp = date;
-    const submitTime = UTCTimestamp.toUTCString().split(' ')[4];
+    const submitTime = date.toUTCString().split(' ')[4];
     const submitTimeInSeconds = dateUtilities.getSecondsFromHMS(submitTime);
     const startHourInSeconds = dateUtilities.getSecondsFromHMS(
       WORKING_HOURS.startHour

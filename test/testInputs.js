@@ -1,18 +1,21 @@
+const newDate = (dateString) => {
+  return new Date(dateString);
+}
+
 const wrongDateInputs = {
   emptyInput: '',
   notValidFormat: 'notRight',
-  weekend: '2018-06-17 09:00',
-  afterWorkHours: '2018-06-15 20:00',
-  notExistentDay: '2018-06-31 09:00',
+  weekend: newDate('2018-06-17T09:00Z'),
+  afterWorkHours: newDate('2018-06-15T20:00Z'),
 };
 
 const validDateInputs = {
-  mondayHour9: '2018-07-02 09:00',
-  fridayHour9: '2018-06-01 09:00',
-  fridayHour10: '2018-07-06 10:00',
-  lastDayOfYearHour16: '2018-12-31 16:00',
-  lastDayOfFebruaryHour16Minutes12: '2018-02-28 16:12',
-  leapYearFebruaryHour16: '2020-02-28 16:00',
+  mondayHour9: newDate('2018-07-02T09:00Z'),
+  fridayHour9: newDate('2018-06-01T09:00Z'),
+  fridayHour10: newDate('2018-07-06T10:00Z'),
+  lastDayOfYearHour16: newDate('2018-12-31T16:00Z'),
+  lastDayOfFebruaryHour16Minutes12: newDate('2018-02-28T16:12Z'),
+  leapYearFebruaryHour16: newDate('2020-02-28T16:00Z'),
 };
 
 const wrongTurnaroundHours = {

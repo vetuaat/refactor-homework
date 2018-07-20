@@ -1,74 +1,64 @@
-'use strict'
+'use strict';
 
 const {dateUtilities} = require('../dateUtilities');
 const {WORKING_DAYS, WORKING_HOURS} = require('../scheduleConstants');
-const {inputFormatError, overWorkHoursError, turnaroundTimeError} = require('./customErrors');
+const {
+  inputFormatError,
+  overWorkHoursError,
+  turnaroundTimeError,
+} = require('./customErrors');
 
 class validation {
   static checkInputs(date, turnaroundHours) {
-    const validatedInputDate = this.isInputDateFormatValid(date);
-    const validatedTurnaroundHours = this.isTurnaroundHoursValid(turnaroundHours);
-    const validatedWorkingTimeSubmit = this.isInWorkingDay(date) && this.isInWorkingTime(date);
-    if (this.isThereAnError([validatedInputDate, validatedTurnaroundHours, validatedWorkingTimeSubmit])) {
-      const errorsObject = {
-        error: true,
-        validatedInputDate,
-        validatedTurnaroundHours,
-        validatedWorkingTimeSubmit,
-      };
-      return errorsObject;
-    } else {
-      return {
-        error: false,
-      };
+    if (this.isInputDateFormatValid(date)) {
+      if (this.isInWorkingDay(date) && this.isInWorkingTime(date)) {
+        if (this.isTurnaroundHoursValid(turnaroundHours)) {
+          return true;
+        }
+        throw new turnaroundTimeError();
+      }
+      throw new overWorkHoursError();
     }
+    throw new inputFormatError();
   }
 
   static isInputDateFormatValid(inputDate) {
-    const regexpForInputTimestamp = /^\d{4}-(((0[13578]|(10|12))-(0[1-9]|[1-2]\d|3[0-1]))|(02-(0[1-9]|[1-2]\d))|((0[469]|11)-(0[1-9]|[1-2]\d|30)))\s([0-1]\d|2[0-3]):[0-5]\d$/;
-    if (inputDate.match(regexpForInputTimestamp)) {
+    if (inputDate instanceof Date) {
+      return true;
+    }
+    return false
+  }
+
+  static isTurnaroundHoursValid(turnaroundHours) {
+    if (turnaroundHours > 0) {
       return true;
     }
     return false;
   }
 
-  static isTurnaroundHoursValid(turnaroundHours) {
-    return turnaroundHours > 0;
-  }
-
   static isInWorkingDay(date) {
     const nameOfTheCurrentDay = dateUtilities.getCurrentDayName(date);
     const isInWorkingDay = WORKING_DAYS.indexOf(nameOfTheCurrentDay) !== -1;
-    return isInWorkingDay;
+    if (isInWorkingDay) {
+      return true;
+    }
+    return false
   }
 
   static isInWorkingTime(date) {
-    const UTCTimestamp = dateUtilities.createUTCTimestamp(date);
+    const UTCTimestamp = date;
     const submitTime = UTCTimestamp.toUTCString().split(' ')[4];
     const submitTimeInSeconds = dateUtilities.getSecondsFromHMS(submitTime);
-    const startHourInSeconds = dateUtilities.getSecondsFromHMS(WORKING_HOURS.startHour);
-    const endHourInSeconds = dateUtilities.getSecondsFromHMS(WORKING_HOURS.endHour);
+    const startHourInSeconds = dateUtilities.getSecondsFromHMS(
+      WORKING_HOURS.startHour
+    );
+    const endHourInSeconds = dateUtilities.getSecondsFromHMS(
+      WORKING_HOURS.endHour
+    );
     const afterStartHour = submitTimeInSeconds >= startHourInSeconds;
     const beforeEndHour = submitTimeInSeconds <= endHourInSeconds;
-
     return afterStartHour && beforeEndHour;
   }
-
-  static isThereAnError(validations) {
-    const isThereAnyNotValid = validations.some((validation) => validation === false)
-    return isThereAnyNotValid;
-  }
-
-  static getFormattedErrorMessages(errors) {
-    return errors.validatedInputDate
-    ? errors.validatedTurnaroundHours
-    ? errors.validatedWorkingTimeSubmit
-    ? new Error()
-    : new overWorkHoursError()
-    : new turnaroundTimeError()
-    : new inputFormatError();
-  }
-};
-
+}
 
 module.exports = {validation};

@@ -1,13 +1,8 @@
 'use strict';
 
 class dateUtilities {
-  static getCurrentDayName(dateStr) {
-    const date = this.createUTCTimestamp(dateStr);
+  static getCurrentDayName(date) {
     return date.toLocaleDateString('en-EN', {weekday: 'long'});
-  }
-
-  static createUTCTimestamp(date) {
-    return new Date(`${date.replace(' ', 'T')}Z`);
   }
 
   static getFullDayWorkHours(startHour, endHour) {

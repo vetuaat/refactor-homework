@@ -4,27 +4,28 @@ const {WORKING_DAYS, WORKING_HOURS} = require('./scheduleConstants');
 const {dateUtilities} = require('./dateUtilities');
 const {validation} = require('./validation/validation');
 
-class dueDateProgram  {
-
+class dueDateProgram {
   calculateDueDate(submitDate, turnaroundHour = 1) {
-    const validatedInputs = validation.checkInputs(submitDate,turnaroundHour);
-    if (validatedInputs.error) {
-      return validation.getFormattedErrorMessages(validatedInputs);
-    } else {
+    try {
+      validation.checkInputs(submitDate, turnaroundHour);
       const dueDate = this.dueDateCalculator(submitDate, turnaroundHour);
       return `Due date: ${dateUtilities.getFormattedUTCDate(dueDate)}`;
+    } catch (error) {
+      return error;
     }
   }
-  
+
   dueDateCalculator(startDate, turnaroundHour) {
-    const UTCTimestamp = dateUtilities.createUTCTimestamp(startDate);
     const timeLeftToWork = this.calculateTimeLeftToWork(turnaroundHour);
-    const dueDate = this.getResolveDate(UTCTimestamp, timeLeftToWork);
+    const dueDate = this.getResolveDate(startDate, timeLeftToWork);
     return new Date(dueDate);
   }
-  
+
   calculateTimeLeftToWork(hours) {
-    const fullDayWorkHours = dateUtilities.getFullDayWorkHours(WORKING_HOURS.startHour, WORKING_HOURS.endHour);
+    const fullDayWorkHours = dateUtilities.getFullDayWorkHours(
+      WORKING_HOURS.startHour,
+      WORKING_HOURS.endHour
+    );
     let daysToWork = Math.floor(hours / fullDayWorkHours);
     let hoursToWork = hours - daysToWork * fullDayWorkHours;
     const isThereFullDayWork = daysToWork > 0 && hoursToWork === 0;
@@ -38,16 +39,24 @@ class dueDateProgram  {
     };
     return calculatedTimes;
   }
-  
+
   getResolveDate(startDate, timeLeft) {
     const cloneStartDate = new Date(startDate);
-    const timestampWithAddedWorkDays = this.addWorkDays(cloneStartDate, timeLeft.daysToWork);
-    const timestampWithAddedWorkDaysAndHours = this.addWorkHours(cloneStartDate, timeLeft.hoursToWork);
-    const finalResolveDate = this.calculateOverflowingDay(timestampWithAddedWorkDaysAndHours);
+    const timestampWithAddedWorkDays = this.addWorkDays(
+      cloneStartDate,
+      timeLeft.daysToWork
+    );
+    const timestampWithAddedWorkDaysAndHours = this.addWorkHours(
+      cloneStartDate,
+      timeLeft.hoursToWork
+    );
+    const finalResolveDate = this.calculateOverflowingDay(
+      timestampWithAddedWorkDaysAndHours
+    );
 
     return finalResolveDate;
   }
-  
+
   addWorkDays(startDate, daysToWork) {
     const SATURDAY_JS = 6;
     const FRIDAY_JS = 5;
@@ -65,7 +74,9 @@ class dueDateProgram  {
         }
       }
     }
-    const newDateAfterWorkDays = new Date(startDate.setDate(startDate.getDate() + daysToAdd))  
+    const newDateAfterWorkDays = new Date(
+      startDate.setDate(startDate.getDate() + daysToAdd)
+    );
     return newDateAfterWorkDays;
   }
 
@@ -89,14 +100,18 @@ class dueDateProgram  {
         minutesAfterAddedWork > workingDayEndMinutes);
     if (afterWorkTime) {
       const addedExtraDay = this.addWorkDays(timestamp, 1);
-      const newDayAfterExtraDay = new Date(addedExtraDay.setUTCHours(workingDayStartHour));
+      const newDayAfterExtraDay = new Date(
+        addedExtraDay.setUTCHours(workingDayStartHour)
+      );
       const remainingHours = hoursAfterAddedWork - workingDayEndHour;
-      const newDateWithOverflowingDay = this.addWorkHours(newDayAfterExtraDay, remainingHours);
+      const newDateWithOverflowingDay = this.addWorkHours(
+        newDayAfterExtraDay,
+        remainingHours
+      );
       return newDateWithOverflowingDay;
     }
     return timestamp;
   }
-
-};
+}
 
 module.exports = dueDateProgram;

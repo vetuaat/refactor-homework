@@ -34,12 +34,6 @@ describe('Test dueDateProgram', function() {
         result: overWorkHoursError,
       },
       {
-        date: wrongDateInputs.notExistentDay,
-        turnaroundHours: validTurnaroundHours.twoHours,
-        behavior: 'should throw exception if given date is not existent',
-        result: inputFormatError,
-      },
-      {
         date: validDateInputs.mondayHour9,
         turnaroundHours: wrongTurnaroundHours.notEnoughTime,
         behavior: 'should throw exception if given turnaround time is a negative or 0 number',
@@ -49,7 +43,6 @@ describe('Test dueDateProgram', function() {
 
     invalidDateAssertions.forEach(({date, turnaroundHours, behavior, result}) => {
       describe(`When called with ${date} and ${turnaroundHours}`, function() {
-        console.log(dueDateCalculator.calculateDueDate(date, turnaroundHours).message);
         it(`${behavior}`, function() {
           expect(
             dueDateCalculator.calculateDueDate(date, turnaroundHours)

@@ -1,7 +1,8 @@
 'use strict'
 
-const {dateUtilities} = require('./dateUtilities');
-const {WORKING_DAYS, WORKING_HOURS} = require('./scheduleConstants');
+const {dateUtilities} = require('../dateUtilities');
+const {WORKING_DAYS, WORKING_HOURS} = require('../scheduleConstants');
+const {inputFormatError, overWorkHoursError, turnaroundTimeError} = require('./customErrors');
 
 class validation {
   static checkInputs(date, turnaroundHours) {
@@ -62,14 +63,12 @@ class validation {
     return errors.validatedInputDate
     ? errors.validatedTurnaroundHours
     ? errors.validatedWorkingTimeSubmit
-    ? 'There was an unexpected error'
-    : 'Please only submit bugs in working hours'
-    : 'Turnaround time must be greater than 0'
-    : 'Please check your input and use the YYYY-MM-DD HH:MM format';
+    ? new Error()
+    : new overWorkHoursError()
+    : new turnaroundTimeError()
+    : new inputFormatError();
   }
-
-
-
 };
+
 
 module.exports = {validation};

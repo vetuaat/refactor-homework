@@ -1,7 +1,7 @@
 'use strict';
 const {expect} = require('chai');
 const dueDateProgram = require('../src/index');
-const {wrongDateInputs, validDateInputs, wrongTurnaroundHours, validTurnaroundHours} = require('./testInputs');
+const {wrongDateInputs, validDateInputs, wrongTurnaroundHours, validTurnaroundHours} = require('./inputs');
 const {inputFormatError, overWorkHoursError, turnaroundTimeError} = require('../src/validation/customErrors');
 const dueDateCalculator = new dueDateProgram();
 

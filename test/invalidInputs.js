@@ -1,7 +1,7 @@
 'use strict';
 const {expect} = require('chai');
 const dueDateProgram = require('../src');
-const {wrongDateInputs, validDateInputs, wrongTurnaroundHours, validTurnaroundHours} = require('./inputs');
+const {dateInputs, wrongInputs, turnaroundHours} = require('./inputs');
 const {inputFormatError, overWorkHoursError, turnaroundTimeError} = require('../src/validation/customErrors');
 const dueDateCalculator = new dueDateProgram();
 
@@ -10,32 +10,32 @@ describe('Test dueDateProgram', function() {
   describe('with invalid input, it returns an error', function() {
     const invalidDateAssertions = [
       {
-        date: wrongDateInputs.emptyInput,
-        turnaroundHours: validTurnaroundHours.twoHours,
+        date: wrongInputs.emptyInput,
+        turnaroundHours: turnaroundHours.twoHours,
         behavior: 'should throw exception if there is no date input',
         result: inputFormatError,
       },
       {
-        date: wrongDateInputs.notValidFormat,
-        turnaroundHours: validTurnaroundHours.twoHours,
+        date: wrongInputs.notValidFormat,
+        turnaroundHours: turnaroundHours.twoHours,
         behavior: 'should throw exception if given date is not a valid YYYY-MM-DD HH:MM format',
         result: inputFormatError,
       },
       {
-        date: wrongDateInputs.weekend,
-        turnaroundHours: validTurnaroundHours.twoHours,
+        date: dateInputs.saturdayHour9,
+        turnaroundHours: turnaroundHours.twoHours,
         behavior: 'should throw exception if given date is weekend',
         result: overWorkHoursError,
       },
       {
-        date: wrongDateInputs.afterWorkHours,
-        turnaroundHours: validTurnaroundHours.twoHours,
+        date: dateInputs.fridayHour20,
+        turnaroundHours: turnaroundHours.twoHours,
         behavior: 'should throw exception if given date is after workhours',
         result: overWorkHoursError,
       },
       {
-        date: validDateInputs.mondayHour9,
-        turnaroundHours: wrongTurnaroundHours.notEnoughTime,
+        date: dateInputs.mondayHour9,
+        turnaroundHours: turnaroundHours.zero,
         behavior: 'should throw exception if given turnaround time is a negative or 0 number',
         result: turnaroundTimeError,
       },

@@ -1,9 +1,8 @@
 'use strict'
 
 const {expect} = require('chai');
-const dueDateProgram = require('../src');
+const dueDateCalculator = require('../src');
 const {dateInputs, turnaroundHours} = require('./inputs');
-const dueDateCalculator = new dueDateProgram();
 
 describe('Test dueDateProgram', function() {
   describe('with valid input, it returns the due date', function() {

@@ -5,7 +5,7 @@ const {dateUtilities} = require('./dateUtilities');
 const {validation} = require('./validation/validation');
 
 class dueDateProgram {
-  calculateDueDate(submitDate, turnaroundHour = 1) {
+  static calculateDueDate(submitDate, turnaroundHour = 1) {
     try {
       validation.checkInputs(submitDate, turnaroundHour);
       const dueDate = this.dueDateCalculator(submitDate, turnaroundHour);
@@ -15,13 +15,13 @@ class dueDateProgram {
     }
   }
 
-  dueDateCalculator(startDate, turnaroundHour) {
+  static dueDateCalculator(startDate, turnaroundHour) {
     const timeLeftToWork = this.calculateTimeLeftToWork(turnaroundHour);
     const dueDate = this.getResolveDate(startDate, timeLeftToWork);
     return new Date(dueDate);
   }
 
-  calculateTimeLeftToWork(hours) {
+  static calculateTimeLeftToWork(hours) {
     const fullDayWorkHours = dateUtilities.getFullDayWorkHours(
       WORKING_HOURS.startHour,
       WORKING_HOURS.endHour
@@ -40,7 +40,7 @@ class dueDateProgram {
     return calculatedTimes;
   }
 
-  getResolveDate(startDate, timeLeft) {
+  static getResolveDate(startDate, timeLeft) {
     const cloneStartDate = new Date(startDate);
     const timestampWithAddedWorkDays = this.addWorkDays(
       cloneStartDate,
@@ -57,7 +57,7 @@ class dueDateProgram {
     return finalResolveDate;
   }
 
-  addWorkDays(startDate, daysToWork) {
+  static addWorkDays(startDate, daysToWork) {
     const SATURDAY_JS = 6;
     const FRIDAY_JS = 5;
     const WEEKEND_DAYS = 2;
@@ -80,14 +80,14 @@ class dueDateProgram {
     return newDateAfterWorkDays;
   }
 
-  addWorkHours(currentDate, hoursToWork) {
+  static addWorkHours(currentDate, hoursToWork) {
     const addedHours = currentDate.setUTCHours(
       currentDate.getUTCHours() + hoursToWork
     );
     return new Date(addedHours);
   }
 
-  calculateOverflowingDay(timestamp) {
+  static calculateOverflowingDay(timestamp) {
     const workingDayEndHour = parseInt(WORKING_HOURS.endHour.split(':')[0]);
     const workingDayEndMinutes = parseInt(WORKING_HOURS.endHour.split(':')[1]);
     const workingDayStartHour = parseInt(WORKING_HOURS.startHour.split(':')[0]);

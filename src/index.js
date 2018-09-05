@@ -8,20 +8,20 @@ class dueDateProgram {
   static calculateDueDate(submitDate, turnaroundHour = 1) {
     try {
       validation.checkInputs(submitDate, turnaroundHour);
-      const dueDate = this.dueDateCalculator(submitDate, turnaroundHour);
+      const dueDate = this._dueDateCalculator(submitDate, turnaroundHour);
       return `Due date: ${dateUtilities.getFormattedUTCDate(dueDate)}`;
     } catch (error) {
       return error;
     }
   }
 
-  static dueDateCalculator(startDate, turnaroundHour) {
-    const timeLeftToWork = this.calculateTimeLeftToWork(turnaroundHour);
-    const dueDate = this.getResolveDate(startDate, timeLeftToWork);
+  static _dueDateCalculator(startDate, turnaroundHour) {
+    const timeLeftToWork = this._calculateTimeLeftToWork(turnaroundHour);
+    const dueDate = this._getResolveDate(startDate, timeLeftToWork);
     return new Date(dueDate);
   }
 
-  static calculateTimeLeftToWork(hours) {
+  static _calculateTimeLeftToWork(hours) {
     const fullDayWorkHours = dateUtilities.getFullDayWorkHours(
       WORKING_HOURS.startHour,
       WORKING_HOURS.endHour
@@ -40,13 +40,13 @@ class dueDateProgram {
     return calculatedTimes;
   }
 
-  static getResolveDate(startDate, timeLeft) {
+  static _getResolveDate(startDate, timeLeft) {
     const cloneStartDate = new Date(startDate);
-    const timestampWithAddedWorkDays = this.addWorkDays(
+    const timestampWithAddedWorkDays = this._addWorkDays(
       cloneStartDate,
       timeLeft.daysToWork
     );
-    const timestampWithAddedWorkDaysAndHours = this.addWorkHours(
+    const timestampWithAddedWorkDaysAndHours = this._addWorkHours(
       cloneStartDate,
       timeLeft.hoursToWork
     );
@@ -57,7 +57,7 @@ class dueDateProgram {
     return finalResolveDate;
   }
 
-  static addWorkDays(startDate, daysToWork) {
+  static _addWorkDays(startDate, daysToWork) {
     const SATURDAY_JS = 6;
     const FRIDAY_JS = 5;
     const WEEKEND_DAYS = 2;
@@ -80,7 +80,7 @@ class dueDateProgram {
     return newDateAfterWorkDays;
   }
 
-  static addWorkHours(currentDate, hoursToWork) {
+  static _addWorkHours(currentDate, hoursToWork) {
     const addedHours = currentDate.setUTCHours(
       currentDate.getUTCHours() + hoursToWork
     );
@@ -99,12 +99,12 @@ class dueDateProgram {
       (hoursAfterAddedWork === workingDayEndHour &&
         minutesAfterAddedWork > workingDayEndMinutes);
     if (afterWorkTime) {
-      const addedExtraDay = this.addWorkDays(timestamp, 1);
+      const addedExtraDay = this._addWorkDays(timestamp, 1);
       const newDayAfterExtraDay = new Date(
         addedExtraDay.setUTCHours(workingDayStartHour)
       );
       const remainingHours = hoursAfterAddedWork - workingDayEndHour;
-      const newDateWithOverflowingDay = this.addWorkHours(
+      const newDateWithOverflowingDay = this._addWorkHours(
         newDayAfterExtraDay,
         remainingHours
       );

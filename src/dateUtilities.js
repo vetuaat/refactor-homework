@@ -2,6 +2,9 @@
 
 class dateUtilities {
 
+  static convertHoursToMS(hours) {
+    return parseInt(hours * 3600000);
+  }
 
   static getCurrentDayName(date) {
     return date.toLocaleDateString('en-EN', {weekday: 'long'});

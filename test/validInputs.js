@@ -33,9 +33,9 @@ describe('Test dueDateProgram', function() {
           result: 'Due date: Jul 09 12:00',
         },
       ];
-      validDateAssertions.forEach(({date, turnaroundHours, result}) => {
+      validDateAssertions.forEach(({date, turnaroundHours, behavior, result}) => {
         describe(`When called with ${date} and ${turnaroundHours}`, function() {
-          it(`should return ${result}`, function() {
+          it(`${behavior}`, function() {
             expect(
               dueDateCalculator.calculateDueDate(date, turnaroundHours)
             ).to.equal(result);

@@ -1,15 +1,14 @@
 'use strict';
 
 class dateUtilities {
+
+
   static getCurrentDayName(date) {
     return date.toLocaleDateString('en-EN', {weekday: 'long'});
   }
 
   static getFullDayWorkHours(startHour, endHour) {
-    const workDayInSeconds =
-      this.getSecondsFromHMS(endHour) - this.getSecondsFromHMS(startHour);
-    const fullDayWorkHour = workDayInSeconds / (60 * 60);
-    return fullDayWorkHour;
+    return endHour - startHour;
   }
 
   static getSecondsFromHMS(stringHMS) {

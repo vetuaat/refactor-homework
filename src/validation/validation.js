@@ -23,26 +23,17 @@ class validation {
   }
 
   static isInputDateFormatValid(inputDate) {
-    if (inputDate instanceof Date) {
-      return true;
-    }
-    return false
+    return (inputDate instanceof Date);
   }
 
   static isTurnaroundHoursValid(turnaroundHours) {
-    if (turnaroundHours > 0) {
-      return true;
-    }
-    return false;
+    return turnaroundHours > 0;
   }
 
   static isInWorkingDay(date) {
     const nameOfTheCurrentDay = dateUtilities.getCurrentDayName(date);
     const isInWorkingDay = WORKING_DAYS.indexOf(nameOfTheCurrentDay) !== -1;
-    if (isInWorkingDay) {
-      return true;
-    }
-    return false
+    return isInWorkingDay
   }
 
   static isInWorkingTime(date) {

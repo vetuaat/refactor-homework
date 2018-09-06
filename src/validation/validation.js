@@ -46,16 +46,11 @@ class validation {
   }
 
   static isInWorkingTime(date) {
-    const submitTime = date.toUTCString().split(' ')[4];
-    const submitTimeInSeconds = dateUtilities.getSecondsFromHMS(submitTime);
-    const startHourInSeconds = dateUtilities.getSecondsFromHMS(
-      WORKING_HOURS.startHour
-    );
-    const endHourInSeconds = dateUtilities.getSecondsFromHMS(
-      WORKING_HOURS.endHour
-    );
-    const afterStartHour = submitTimeInSeconds >= startHourInSeconds;
-    const beforeEndHour = submitTimeInSeconds <= endHourInSeconds;
+    const submitTime = dateUtilities.convertHoursToMS(date.getUTCHours());
+    const startHour = dateUtilities.convertHoursToMS(WORKING_HOURS.startHour.getUTCHours());
+    const endHour = dateUtilities.convertHoursToMS(WORKING_HOURS.endHour.getUTCHours());
+    const afterStartHour = submitTime >= startHour;
+    const beforeEndHour = submitTime <= endHour;
     return afterStartHour && beforeEndHour;
   }
 }

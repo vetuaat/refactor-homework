@@ -21,10 +21,11 @@ class dueDateProgram {
     return new Date(dueDate);
   }
 
+
   static _calculateTimeLeftToWork(hours) {
     const fullDayWorkHours = dateUtilities.getFullDayWorkHours(
-      WORKING_HOURS.startHour,
-      WORKING_HOURS.endHour
+      WORKING_HOURS.startHour.getUTCHours(),
+      WORKING_HOURS.endHour.getUTCHours()
     );
     let daysToWork = Math.floor(hours / fullDayWorkHours);
     let hoursToWork = hours - daysToWork * fullDayWorkHours;
@@ -42,7 +43,7 @@ class dueDateProgram {
 
   static _getResolveDate(startDate, timeLeft) {
     const cloneStartDate = new Date(startDate);
-    const timestampWithAddedWorkDays = this._addWorkDays(
+    this._addWorkDays(
       cloneStartDate,
       timeLeft.daysToWork
     );
@@ -88,9 +89,9 @@ class dueDateProgram {
   }
 
   static calculateOverflowingDay(timestamp) {
-    const workingDayEndHour = parseInt(WORKING_HOURS.endHour.split(':')[0]);
-    const workingDayEndMinutes = parseInt(WORKING_HOURS.endHour.split(':')[1]);
-    const workingDayStartHour = parseInt(WORKING_HOURS.startHour.split(':')[0]);
+    const workingDayEndHour = WORKING_HOURS.endHour.getUTCHours();
+    const workingDayEndMinutes = WORKING_HOURS.endHour.getUTCMinutes();
+    const workingDayStartHour = WORKING_HOURS.startHour.getUTCHours();
     const hoursAfterAddedWork = timestamp.getUTCHours();
     const minutesAfterAddedWork = timestamp.getUTCMinutes();
 

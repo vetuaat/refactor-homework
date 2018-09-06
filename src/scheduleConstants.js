@@ -1,9 +1,17 @@
 'use strict'
 
+const startHour = new Date();
+const endHour = new Date();
+
+startHour.setUTCHours(9,0,0);
+endHour.setUTCHours(17,0,0);
+
+
 const WORKING_HOURS = {
-  startHour: '09:00:00',
-  endHour: '17:00:00',
+  startHour,
+  endHour,
 };
+
 
 const WORKING_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 

@@ -16,54 +16,38 @@ class dueDateProgram {
   }
 
   static _dueDateCalculator(startDate, turnaroundHour) {
-    const timeLeftToWork = this._calculateTimeLeftToWork(turnaroundHour);
-    const dueDate = this._getResolveDate(startDate, timeLeftToWork);
-    return new Date(dueDate);
-  }
+
+    let calculatedDate = dateUtilities.newUTCDate(startDate);
+    let remainingTimeMinutes = dateUtilities.convertHoursToMinutes(turnaroundHour);
 
 
-  static _calculateTimeLeftToWork(hours) {
-    const fullDayWorkHours = dateUtilities.getFullDayWorkHours(
-      WORKING_HOURS.startHour,
-      WORKING_HOURS.endHour
-    );
-    let daysToWork = Math.floor(hours / fullDayWorkHours);
-    let hoursToWork = hours - daysToWork * fullDayWorkHours;
-    const isThereFullDayWork = daysToWork > 0 && hoursToWork === 0;
-    if (isThereFullDayWork) {
-      daysToWork -= 1;
-      hoursToWork += fullDayWorkHours;
+    while (this._notInTheSameDay(calculatedDate, remainingTimeMinutes)) {
+      remainingTimeMinutes -= (dateUtilities.convertHoursToMinutes(WORKING_HOURS.endHour - calculatedDate.getUTCHours())) - calculatedDate.getUTCMinutes();
+      this._addWorkDay(calculatedDate);
     }
-    const calculatedTimes = {
-      daysToWork,
-      hoursToWork,
-    };
-    return calculatedTimes;
+    const dueDate = calculatedDate.setUTCMinutes(remainingTimeMinutes);
+    return dateUtilities.newUTCDate(dueDate);
   }
 
-  static _getResolveDate(startDate, timeLeft) {
-    const cloneStartDate = new Date(startDate);
-    this._addWorkDays(
-      cloneStartDate,
-      timeLeft.daysToWork
-    );
-    const timestampWithAddedWorkDaysAndHours = this._addWorkHours(
-      cloneStartDate,
-      timeLeft.hoursToWork
-    );
-    const finalResolveDate = this.calculateOverflowingDay(
-      timestampWithAddedWorkDaysAndHours
-    );
 
-    return finalResolveDate;
+  static _notInTheSameDay(startDate, remainingTimeMinutes) {
+    const convertHoursMinutes = dateUtilities.convertHoursToMinutes;
+
+    const workTimeframe = (dateUtilities.convertHoursToMinutes(WORKING_HOURS.endHour - startDate.getUTCHours())) - startDate.getUTCMinutes();
+    return workTimeframe < remainingTimeMinutes;
+
   }
 
-  static _addWorkDays(startDate, daysToWork) {
+  static _addWorkDay(startDate, addDays = 1) {
     const SATURDAY_JS = 6;
     const FRIDAY_JS = 5;
     const WEEKEND_DAYS = 2;
-    const currentDay = startDate.getDay();
-    let daysToAdd = daysToWork;
+    const currentDay = startDate.getUTCDay();
+    let daysToAdd = addDays;
+
+    if (currentDay === 0) {
+      daysToAdd++;
+    }
     const weekend = currentDay + daysToAdd >= SATURDAY_JS;
     if (weekend) {
       const workDaysRemaining = daysToAdd - (FRIDAY_JS - currentDay);
@@ -75,43 +59,8 @@ class dueDateProgram {
         }
       }
     }
-    const newDateAfterWorkDays = new Date(
-      startDate.setDate(startDate.getDate() + daysToAdd)
-    );
-    return newDateAfterWorkDays;
-  }
-
-  static _addWorkHours(currentDate, hoursToWork) {
-    const addedHours = currentDate.setUTCHours(
-      currentDate.getUTCHours() + hoursToWork
-    );
-    return new Date(addedHours);
-  }
-
-  static calculateOverflowingDay(timestamp) {
-    const workingDayEndHour = WORKING_HOURS.endHour;
-    const workingDayEndMinutes = WORKING_HOURS.endMinutes;
-    const workingDayStartHour = WORKING_HOURS.startHour;
-    const hoursAfterAddedWork = timestamp.getUTCHours();
-    const minutesAfterAddedWork = timestamp.getUTCMinutes();
-
-    const afterWorkTime =
-      hoursAfterAddedWork > workingDayEndHour ||
-      (hoursAfterAddedWork === workingDayEndHour &&
-        minutesAfterAddedWork > workingDayEndMinutes);
-    if (afterWorkTime) {
-      const addedExtraDay = this._addWorkDays(timestamp, 1);
-      const newDayAfterExtraDay = new Date(
-        addedExtraDay.setUTCHours(workingDayStartHour)
-      );
-      const remainingHours = hoursAfterAddedWork - workingDayEndHour;
-      const newDateWithOverflowingDay = this._addWorkHours(
-        newDayAfterExtraDay,
-        remainingHours
-      );
-      return newDateWithOverflowingDay;
-    }
-    return timestamp;
+    startDate.setUTCDate(startDate.getUTCDate() + daysToAdd);
+    startDate.setUTCHours(WORKING_HOURS.startHour, WORKING_HOURS.startMinutes);
   }
 }
 

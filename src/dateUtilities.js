@@ -6,6 +6,10 @@ class dateUtilities {
     return parseInt(hours * 3600000);
   }
 
+  static convertMinutesToMS(minutes) {
+    return parseInt(minutes * 60000);
+  }
+
   static getCurrentDayName(date) {
     return date.toLocaleDateString('en-EN', {weekday: 'long'});
   }

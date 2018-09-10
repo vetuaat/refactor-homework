@@ -33,13 +33,13 @@ class validation {
   static isInWorkingDay(date) {
     const nameOfTheCurrentDay = dateUtilities.getCurrentDayName(date);
     const isInWorkingDay = WORKING_DAYS.indexOf(nameOfTheCurrentDay) !== -1;
-    return isInWorkingDay
+    return isInWorkingDay;
   }
 
   static isInWorkingTime(date) {
     const submitTime = dateUtilities.convertHoursToMS(date.getUTCHours());
-    const startHour = dateUtilities.convertHoursToMS(WORKING_HOURS.startHour.getUTCHours());
-    const endHour = dateUtilities.convertHoursToMS(WORKING_HOURS.endHour.getUTCHours());
+    const startHour = dateUtilities.convertHoursToMS(WORKING_HOURS.startHour);
+    const endHour = dateUtilities.convertHoursToMS(WORKING_HOURS.endHour);
     const afterStartHour = submitTime >= startHour;
     const beforeEndHour = submitTime <= endHour;
     return afterStartHour && beforeEndHour;

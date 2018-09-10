@@ -8,8 +8,10 @@ endHour.setUTCHours(17,0,0);
 
 
 const WORKING_HOURS = {
-  startHour,
-  endHour,
+  startHour: startHour.getUTCHours(),
+  endHour: endHour.getUTCHours(),
+  startMinutes: startHour.getUTCMinutes(),
+  endMinutes: endHour.getUTCMinutes(),
 };
 
 

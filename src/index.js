@@ -24,8 +24,8 @@ class dueDateProgram {
 
   static _calculateTimeLeftToWork(hours) {
     const fullDayWorkHours = dateUtilities.getFullDayWorkHours(
-      WORKING_HOURS.startHour.getUTCHours(),
-      WORKING_HOURS.endHour.getUTCHours()
+      WORKING_HOURS.startHour,
+      WORKING_HOURS.endHour
     );
     let daysToWork = Math.floor(hours / fullDayWorkHours);
     let hoursToWork = hours - daysToWork * fullDayWorkHours;
@@ -89,9 +89,9 @@ class dueDateProgram {
   }
 
   static calculateOverflowingDay(timestamp) {
-    const workingDayEndHour = WORKING_HOURS.endHour.getUTCHours();
-    const workingDayEndMinutes = WORKING_HOURS.endHour.getUTCMinutes();
-    const workingDayStartHour = WORKING_HOURS.startHour.getUTCHours();
+    const workingDayEndHour = WORKING_HOURS.endHour;
+    const workingDayEndMinutes = WORKING_HOURS.endMinutes;
+    const workingDayStartHour = WORKING_HOURS.startHour;
     const hoursAfterAddedWork = timestamp.getUTCHours();
     const minutesAfterAddedWork = timestamp.getUTCMinutes();
 

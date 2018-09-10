@@ -1,17 +1,17 @@
 'use strict'
 
-const startHour = new Date();
-const endHour = new Date();
+const startTime = new Date();
+const endTime = new Date();
 
-startHour.setUTCHours(9,0,0);
-endHour.setUTCHours(17,0,0);
+startTime.setUTCHours(9,0,0);
+endTime.setUTCHours(17,0,0);
 
 
 const WORKING_HOURS = {
-  startHour: startHour.getUTCHours(),
-  endHour: endHour.getUTCHours(),
-  startMinutes: startHour.getUTCMinutes(),
-  endMinutes: endHour.getUTCMinutes(),
+  startHour: startTime.getUTCHours(),
+  endHour: endTime.getUTCHours(),
+  startMinutes: startTime.getUTCMinutes(),
+  endMinutes: endTime.getUTCMinutes(),
 };
 
 

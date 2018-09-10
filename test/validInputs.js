@@ -27,6 +27,12 @@ describe('Test dueDateProgram', function() {
           result: 'Due date: Jul 03 11:00',
         },
         {
+          date: dateInputs.mondayHour16Minute12,
+          turnaroundHours: turnaroundHours.twoHours,
+          behavior: 'should return with proper due date if we set minutes too',
+          result: 'Due date: Sep 11 10:12',
+        },
+        {
           date: dateInputs.fridayHour10,
           turnaroundHours: turnaroundHours.tenHours,
           behavior: 'should return with due date at the next next week if there is a weekend',
@@ -43,10 +49,6 @@ describe('Test dueDateProgram', function() {
         });
       });
     });
-
-
-
-
     
     describe('tests contains edge cases', function() {
       it('should return with due date at the next month if the current date is at the end of the month or the given turnaround time is more than the remainig hours in the month', function() {

@@ -1,7 +1,9 @@
 'use strict'
 
-const startTime = new Date();
-const endTime = new Date();
+const {dateUtilities} = require('./dateUtilities');
+
+const startTime = dateUtilities.newUTCDate(new Date());
+const endTime = dateUtilities.newUTCDate(new Date());
 
 startTime.setUTCHours(9,0,0);
 endTime.setUTCHours(17,0,0);

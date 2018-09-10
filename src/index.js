@@ -45,9 +45,6 @@ class dueDateProgram {
     const currentDay = startDate.getUTCDay();
     let daysToAdd = addDays;
 
-    if (currentDay === 0) {
-      daysToAdd++;
-    }
     const weekend = currentDay + daysToAdd >= SATURDAY_JS;
     if (weekend) {
       const workDaysRemaining = daysToAdd - (FRIDAY_JS - currentDay);

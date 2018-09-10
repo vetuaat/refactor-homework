@@ -1,6 +1,6 @@
 'use strict';
 
-const {WORKING_DAYS, WORKING_HOURS} = require('./scheduleConstants');
+const {WORKING_HOURS} = require('./scheduleConstants');
 const {dateUtilities} = require('./dateUtilities');
 const {validation} = require('./validation/validation');
 

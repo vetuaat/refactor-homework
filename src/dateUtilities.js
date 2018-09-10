@@ -18,6 +18,13 @@ class dateUtilities {
     return endHour - startHour;
   }
 
+  static newUTCDate(date) {
+    const cloneDate = new Date(date);
+    const UTCNow = Date.UTC(cloneDate.getUTCFullYear(), cloneDate.getUTCMonth(), cloneDate.getUTCDate(),
+    cloneDate.getUTCHours(), cloneDate.getUTCMinutes(), cloneDate.getUTCSeconds());
+    return new Date(UTCNow);
+  }
+
   static getFormattedUTCDate(date) {
     const dateArray = date.toUTCString().split(' ');
     const dayOfMonth = dateArray[2];

@@ -7,6 +7,7 @@ const wrongInputs = {
 
 const dateInputs = {
   mondayHour9: dateUtilities.newUTCDate('2018-07-02T09:00Z'),
+  mondayHour16Minute12: dateUtilities.newUTCDate('2018-09-10T16:12Z'),
   fridayHour9: dateUtilities.newUTCDate('2018-06-01T09:00Z'),
   fridayHour10: dateUtilities.newUTCDate('2018-07-06T10:00Z'),
   fridayHour20: dateUtilities.newUTCDate('2018-06-15T20:00Z'),

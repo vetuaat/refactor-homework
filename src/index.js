@@ -7,9 +7,11 @@ const {validation} = require('./validation/validation');
 class dueDateProgram {
   static calculateDueDate(submitDate, turnaroundHour = 1) {
     try {
+
       validation.checkInputs(submitDate, turnaroundHour);
       const dueDate = this._dueDateCalculator(submitDate, turnaroundHour);
       return `Due date: ${dateUtilities.getFormattedUTCDate(dueDate)}`;
+
     } catch (error) {
       return error;
     }
@@ -20,23 +22,24 @@ class dueDateProgram {
     let calculatedDate = dateUtilities.newUTCDate(startDate);
     let remainingTimeMinutes = dateUtilities.convertHoursToMinutes(turnaroundHour);
 
-
     while (this._notInTheSameDay(calculatedDate, remainingTimeMinutes)) {
       remainingTimeMinutes -= (dateUtilities.convertHoursToMinutes(WORKING_HOURS.endHour - calculatedDate.getUTCHours())) - calculatedDate.getUTCMinutes();
       this._addWorkDay(calculatedDate);
     }
+
     const dueDate = calculatedDate.setUTCMinutes(remainingTimeMinutes);
     return dateUtilities.newUTCDate(dueDate);
   }
 
 
+
   static _notInTheSameDay(startDate, remainingTimeMinutes) {
     const convertHoursMinutes = dateUtilities.convertHoursToMinutes;
-
     const workTimeframe = (dateUtilities.convertHoursToMinutes(WORKING_HOURS.endHour - startDate.getUTCHours())) - startDate.getUTCMinutes();
     return workTimeframe < remainingTimeMinutes;
 
   }
+
 
   static _addWorkDay(startDate, addDays = 1) {
     const SATURDAY_JS = 6;
@@ -56,8 +59,10 @@ class dueDateProgram {
         }
       }
     }
+
     startDate.setUTCDate(startDate.getUTCDate() + daysToAdd);
     startDate.setUTCHours(WORKING_HOURS.startHour, WORKING_HOURS.startMinutes);
+    
   }
 }
 

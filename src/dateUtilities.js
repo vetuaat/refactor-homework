@@ -2,12 +2,8 @@
 
 class dateUtilities {
 
-  static convertHoursToMS(hours) {
-    return parseInt(hours * 3600000);
-  }
-
-  static convertMinutesToMS(minutes) {
-    return parseInt(minutes * 60000);
+  static convertHoursToMinutes(hours) {
+    return parseInt(hours * 60);
   }
 
   static getCurrentDayName(date) {

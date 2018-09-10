@@ -37,9 +37,9 @@ class validation {
   }
 
   static isInWorkingTime(date) {
-    const submitTime = dateUtilities.convertHoursToMS(date.getUTCHours());
-    const startHour = dateUtilities.convertHoursToMS(WORKING_HOURS.startHour);
-    const endHour = dateUtilities.convertHoursToMS(WORKING_HOURS.endHour);
+    const submitTime = dateUtilities.convertHoursToMinutes(date.getUTCHours());
+    const startHour = dateUtilities.convertHoursToMinutes(WORKING_HOURS.startHour);
+    const endHour = dateUtilities.convertHoursToMinutes(WORKING_HOURS.endHour);
     const afterStartHour = submitTime >= startHour;
     const beforeEndHour = submitTime <= endHour;
     return afterStartHour && beforeEndHour;
